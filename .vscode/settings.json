@@ -1,0 +1,7 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./cell_tower_geolocation/Cargo.toml",
+        "./cell_tower_geolocation/Cargo.toml"
+    ],
+    "rust-analyzer.showUnlinkedFileNotification": false
+}
