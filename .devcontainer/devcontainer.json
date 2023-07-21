@@ -1,0 +1,10 @@
+{
+    "name": "Rust App",
+    "context": "..",
+    "dockerFile": "../build/Dockerfile",
+    "settings": {
+      "terminal.integrated.shell.linux": null
+    },
+    "runArgs": ["--network=host"]
+  }
+  
