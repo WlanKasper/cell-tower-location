@@ -21,6 +21,4 @@ impl<C: hyper::client::Connect> APIClient<C> {
   pub fn coordinates_api(&self) -> &dyn (::apis::CoordinatesApi){
     self.coordinates_api.as_ref()
   }
-
-
 }
