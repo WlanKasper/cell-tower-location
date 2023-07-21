@@ -11,7 +11,7 @@
 use std::rc::Rc;
 use std::borrow::Borrow;
 use std::borrow::Cow;
-use std::collections::HashMap;
+
 
 use hyper;
 use serde_json;
@@ -35,13 +35,13 @@ impl<C: hyper::client::Connect> CoordinatesApiClient<C> {
 }
 
 pub trait CoordinatesApi {
-    fn decode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn encode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>>;
+    fn decode_wgs84(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
+    fn encode_wgs84(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>>;
 }
 
 
 impl<C: hyper::client::Connect>CoordinatesApi for CoordinatesApiClient<C> {
-    fn decode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn decode_wgs84(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
         let configuration: &configuration::Configuration<C> = self.configuration.borrow();
 
         let method = hyper::Method::Post;
@@ -56,7 +56,7 @@ impl<C: hyper::client::Connect>CoordinatesApi for CoordinatesApiClient<C> {
         // if let Err(e) = uri {
         //     return Box::new(futures::future::err(e));
         // }
-        let mut uri: hyper::Uri = uri_str.parse().unwrap();
+        let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let mut req = hyper::Request::new(method, uri);
 
@@ -88,7 +88,7 @@ impl<C: hyper::client::Connect>CoordinatesApi for CoordinatesApiClient<C> {
         )
     }
 
-    fn encode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn encode_wgs84(&self, ) -> Box<dyn Future<Item = (), Error = Error<serde_json::Value>>> {
         let configuration: &configuration::Configuration<C> = self.configuration.borrow();
 
         let method = hyper::Method::Post;
@@ -103,7 +103,7 @@ impl<C: hyper::client::Connect>CoordinatesApi for CoordinatesApiClient<C> {
         // if let Err(e) = uri {
         //     return Box::new(futures::future::err(e));
         // }
-        let mut uri: hyper::Uri = uri_str.parse().unwrap();
+        let uri: hyper::Uri = uri_str.parse().unwrap();
 
         let mut req = hyper::Request::new(method, uri);
 
