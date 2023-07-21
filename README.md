@@ -17,7 +17,7 @@ Put the package under your project folder and add the following in import:
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://localhost*
+All URIs are relative to *https://localhost:33999*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -27,6 +27,8 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [Wgs84Decoded](docs/Wgs84Decoded.md)
+ - [Wgs84Encoded](docs/Wgs84Encoded.md)
 
 
 ## Documentation For Authorization

@@ -31,7 +31,7 @@ pub struct ApiKey {
 impl<C: hyper::client::Connect> Configuration<C> {
   pub fn new(client: hyper::client::Client<C>) -> Configuration<C> {
     Configuration {
-      base_path: "https://localhost".to_owned(),
+      base_path: "https://localhost:33999".to_owned(),
       user_agent: Some("Swagger-Codegen/0.1.0/rust".to_owned()),
       client: client,
       basic_auth: None,

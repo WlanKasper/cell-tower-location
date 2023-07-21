@@ -35,20 +35,19 @@ impl<C: hyper::client::Connect> CoordinatesApiClient<C> {
 }
 
 pub trait CoordinatesApi {
-    fn decode_wgs84(&self, wgs84: ::models::Value) -> Box<Future<Item = (), Error = Error<serde_json::Value>>>;
-    fn encode_wgs84(&self, latitude: ::models::Value, longitude: ::models::Value, inner_radiuse: ::models::Value, uncertainty_radiuse: ::models::Value, offset_angle: ::models::Value, included_angle: ::models::Value, confidence: ::models::Value) -> Box<Future<Item = (), Error = Error<serde_json::Value>>>;
+    fn decode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>>;
+    fn encode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>>;
 }
 
 
 impl<C: hyper::client::Connect>CoordinatesApi for CoordinatesApiClient<C> {
-    fn decode_wgs84(&self, wgs84: ::models::Value) -> Box<Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn decode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>> {
         let configuration: &configuration::Configuration<C> = self.configuration.borrow();
 
         let method = hyper::Method::Post;
 
         let query_string = {
             let mut query = ::url::form_urlencoded::Serializer::new(String::new());
-            query.append_pair("wgs84", &wgs84.to_string());
             query.finish()
         };
         let uri_str = format!("{}/wgs84/decode?{}", configuration.base_path, query_string);
@@ -89,20 +88,13 @@ impl<C: hyper::client::Connect>CoordinatesApi for CoordinatesApiClient<C> {
         )
     }
 
-    fn encode_wgs84(&self, latitude: ::models::Value, longitude: ::models::Value, inner_radiuse: ::models::Value, uncertainty_radiuse: ::models::Value, offset_angle: ::models::Value, included_angle: ::models::Value, confidence: ::models::Value) -> Box<Future<Item = (), Error = Error<serde_json::Value>>> {
+    fn encode_wgs84(&self, ) -> Box<Future<Item = (), Error = Error<serde_json::Value>>> {
         let configuration: &configuration::Configuration<C> = self.configuration.borrow();
 
         let method = hyper::Method::Post;
 
         let query_string = {
             let mut query = ::url::form_urlencoded::Serializer::new(String::new());
-            query.append_pair("latitude", &latitude.to_string());
-            query.append_pair("longitude", &longitude.to_string());
-            query.append_pair("innerRadiuse", &inner_radiuse.to_string());
-            query.append_pair("uncertaintyRadiuse", &uncertainty_radiuse.to_string());
-            query.append_pair("offsetAngle", &offset_angle.to_string());
-            query.append_pair("includedAngle", &included_angle.to_string());
-            query.append_pair("confidence", &confidence.to_string());
             query.finish()
         };
         let uri_str = format!("{}/wgs84/encode?{}", configuration.base_path, query_string);
