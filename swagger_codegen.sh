@@ -6,7 +6,12 @@
 docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
     -i local/swagger.yaml \
     -l rust \
-    -o /local
+    -o /local/source/client/
+
+docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
+    -i local/swagger.yaml \
+    -l rust-server \
+    -o /local/source/swagger/
 # --------------------------------------
 
 # --------------------------------------
@@ -14,6 +19,6 @@ docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
 # docker pull swaggerapi/swagger-codegen-cli-v3
 docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
     -i local/swagger.yaml \
-    -l go \
-    -o /local/out/go
+    -l ruby \
+    -o /local/source/
 # --------------------------------------
