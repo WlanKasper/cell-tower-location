@@ -1,4 +1,8 @@
 
+use itertools::Itertools;
+
+
+
 pub struct WGS84 {
     pub wgs84: String,
     pub shape: String,
@@ -12,18 +16,40 @@ pub struct WGS84 {
 }
 
 impl WGS84 {
-    pub fn encode(&mut self) {
-        self.wgs84 = (&"A0").to_string();
-        self.wgs84 += &Self::enc_latitude(self.latitude);
-        self.wgs84 += &Self::enc_longitude(self.longitude);
-        self.wgs84 += &Self::enc_inner_radius(self.inner_radius);
-        self.wgs84 += &Self::enc_uncertainty_radius(self.uncertainty_radius);
-        self.wgs84 += &Self::enc_offset_angle(self.offset_angle);
-        self.wgs84 += &Self::enc_included_angle(self.included_angle);
-        self.wgs84 += &Self::enc_confidence(self.confidence);
+    pub fn display(&self) {
+        println!("=======================================================================");
+        println!("WGS84: ------------------------ {}", &self.wgs84);
+        println!("=======================================================================");
+        println!("Shape: ------------------------ {}", &self.shape);
+        println!("Latitude: --------------------- {}", &self.latitude);
+        println!("Longitude: -------------------- {}", &self.longitude);
+        println!("Inner radius: ----------------- {}", &self.inner_radius);
+        println!("Uncertainty radius: ----------- {}", &self.uncertainty_radius);
+        println!("Offset angle: ----------------- {}", &self.offset_angle);
+        println!("Included angle: --------------- {}", &self.included_angle);
+        println!("Confidence: ------------------- {}", &self.confidence);
+        println!("=======================================================================");
     }
 
-    pub fn decode(&self) {}
+    pub fn encode(&mut self) {
+        let mut wgs84 = (&"A0").to_string();
+        wgs84 += &Self::enc_latitude(self.latitude);
+        wgs84 += &Self::enc_longitude(self.longitude);
+        wgs84 += &Self::enc_inner_radius(self.inner_radius);
+        wgs84 += &Self::enc_uncertainty_radius(self.uncertainty_radius);
+        wgs84 += &Self::enc_offset_angle(self.offset_angle);
+        wgs84 += &Self::enc_included_angle(self.included_angle);
+        wgs84 += &Self::enc_confidence(self.confidence);
+
+        self.wgs84 = wgs84
+            .chars()
+            .chunks(2)
+            .into_iter()
+            .map(|chunk| chunk.collect::<String>())
+            .join(" ");
+    }
+
+    pub fn decode(&mut self) {}
 
     fn enc_latitude(latitude: f32) -> String {
         let is_neg: bool = latitude < 0.0;

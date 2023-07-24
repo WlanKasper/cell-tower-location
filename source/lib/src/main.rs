@@ -14,8 +14,7 @@ fn main() {
     };
 
     coordinates.encode();
-
-    println!("{0}", coordinates.wgs84);
+    coordinates.display();
 }
 
 // A0 49 41 81 09 11 4C 00 0B 12 AE 21 5A
