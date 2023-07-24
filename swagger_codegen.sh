@@ -11,7 +11,7 @@ docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
 docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
     -i local/swagger.yaml \
     -l rust-server \
-    -o /local/source/server/
+    -o /local/source/swagger/
 # --------------------------------------
 
 # --------------------------------------
