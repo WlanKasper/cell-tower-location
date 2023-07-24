@@ -5,7 +5,7 @@ use super::configuration::Configuration;
 
 pub struct APIClient<C: hyper::client::Connect> {
   configuration: Rc<Configuration<C>>,
-  coordinates_api: Box<dyn (::apis::CoordinatesApi)>,
+  coordinates_api: Box<::apis::CoordinatesApi>,
 }
 
 impl<C: hyper::client::Connect> APIClient<C> {
@@ -18,7 +18,9 @@ impl<C: hyper::client::Connect> APIClient<C> {
     }
   }
 
-  pub fn coordinates_api(&self) -> &dyn (::apis::CoordinatesApi){
+  pub fn coordinates_api(&self) -> &::apis::CoordinatesApi{
     self.coordinates_api.as_ref()
   }
+
+
 }

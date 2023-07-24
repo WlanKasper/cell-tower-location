@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     file \
-    git
+    ruby-full
 
 # Install Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y

@@ -48,7 +48,7 @@ impl<T> From<serde_json::Error> for Error<T> {
     }
 }
 
-
+use super::models::*;
 
 mod coordinates_api;
 pub use self::coordinates_api::{ CoordinatesApi, CoordinatesApiClient };
