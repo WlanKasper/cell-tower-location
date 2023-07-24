@@ -32,14 +32,17 @@ impl WGS84 {
     }
 
     pub fn encode(&mut self) {
-        let mut wgs84 = (&"A0").to_string();
-        wgs84 += &Self::enc_latitude(self.latitude);
-        wgs84 += &Self::enc_longitude(self.longitude);
-        wgs84 += &Self::enc_inner_radius(self.inner_radius);
-        wgs84 += &Self::enc_uncertainty_radius(self.uncertainty_radius);
-        wgs84 += &Self::enc_offset_angle(self.offset_angle);
-        wgs84 += &Self::enc_included_angle(self.included_angle);
-        wgs84 += &Self::enc_confidence(self.confidence);
+        let wgs84 = format!(
+            "{}{}{}{}{}{}{}{}",
+            self.shape,
+            Self::enc_latitude(self.latitude),
+            Self::enc_longitude(self.longitude),
+            Self::enc_inner_radius(self.inner_radius),
+            Self::enc_uncertainty_radius(self.uncertainty_radius),
+            Self::enc_offset_angle(self.offset_angle),
+            Self::enc_included_angle(self.included_angle),
+            Self::enc_confidence(self.confidence)
+        );
 
         self.wgs84 = wgs84
             .chars()
