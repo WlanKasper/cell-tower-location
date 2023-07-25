@@ -2,7 +2,6 @@
 use itertools::Itertools;
 
 
-
 pub struct WGS84 {
     pub wgs84: String,
     pub shape: String,
@@ -16,25 +15,11 @@ pub struct WGS84 {
 }
 
 impl WGS84 {
-    pub fn display(&self) {
-        println!("=======================================================================");
-        println!("WGS84: ------------------------ {}", &self.wgs84);
-        println!("=======================================================================");
-        println!("Shape: ------------------------ {}", &self.shape);
-        println!("Latitude: --------------------- {}", &self.latitude);
-        println!("Longitude: -------------------- {}", &self.longitude);
-        println!("Inner radius: ----------------- {}", &self.inner_radius);
-        println!("Uncertainty radius: ----------- {}", &self.uncertainty_radius);
-        println!("Offset angle: ----------------- {}", &self.offset_angle);
-        println!("Included angle: --------------- {}", &self.included_angle);
-        println!("Confidence: ------------------- {}", &self.confidence);
-        println!("=======================================================================");
-    }
 
     pub fn encode(&mut self) {
         let wgs84 = format!(
             "{}{}{}{}{}{}{}{}",
-            self.shape,
+            Self::enc_shape(&self.shape),
             Self::enc_latitude(self.latitude),
             Self::enc_longitude(self.longitude),
             Self::enc_inner_radius(self.inner_radius),
@@ -46,13 +31,30 @@ impl WGS84 {
 
         self.wgs84 = wgs84
             .chars()
-            .chunks(2)
+            .chunks(8)
             .into_iter()
             .map(|chunk| chunk.collect::<String>())
             .join(" ");
     }
 
     pub fn decode(&mut self) {}
+
+    // =====================================================================
+
+    fn enc_shape(shape: &str) -> String {
+        let enc = match shape {
+            "00" => "00000000".to_string(),
+            "10" => "00010000".to_string(),
+            "30" => "00110000".to_string(),
+            "50" => "01010000".to_string(),
+            "80" => "10000000".to_string(),
+            "90" => "10010000".to_string(),
+            "A0" => "10100000".to_string(),
+            _ => "".to_string(),
+        };
+
+        return enc.to_string();
+    }
 
     fn enc_latitude(latitude: f32) -> String {
         let is_neg: bool = latitude < 0.0;
@@ -61,7 +63,7 @@ impl WGS84 {
 
         let enc: u32 = (is_neg as u32) << 23 as u32 | lat;
 
-        return format!("{:0>6X}", enc);
+        return format!("{:0<24b}", enc);
     }
 
     fn enc_longitude(longitude: f32) -> String {
@@ -77,12 +79,12 @@ impl WGS84 {
 
         let enc = isize::from_str_radix(&_enc, 2).unwrap();
 
-        return format!("{:0>6X}", enc);
+        return format!("{:0<24b}", enc);
     }
 
     fn enc_inner_radius(ir: u16) -> String {
         let ir: u16 = ir / 5;
-        let enc: String = format!("{:0>4X}", ir);
+        let enc: String = format!("{:0<16b}", ir);
 
         return enc;
     }
@@ -93,29 +95,61 @@ impl WGS84 {
         let _enc: f32 = ur.log(1.1);
         let _enc: u16 = _enc.round() as u16;
 
-        let enc: String = format!("{:0>2X}", _enc);
+        let mut enc: String = format!("{:0<7b}", _enc);
+        enc = "0".to_owned() + &enc;
 
         return enc;
     }
 
     fn enc_offset_angle(oa: u16) -> String {
         let oa: u16 = oa / 2;
-        let enc: String = format!("{:0>2X}", oa);
+        let enc: String = format!("{:0<8b}", oa);
 
         return enc;
     }
 
     fn enc_included_angle(ia: u16) -> String {
         let ia: u16 = ia / 2;
-        let enc: String = format!("{:0>2X}", ia);
+        let enc: String = format!("{:0<8b}", ia);
 
         return enc;
     }
 
     fn enc_confidence(cf: u8) -> String {
-        let enc: String = format!("{:0>2X}", cf);
+        let mut enc: String = format!("{:0<7b}", cf);
+        enc = "0".to_owned() + &enc;
 
         return enc;
+    }
+
+    // =====================================================================
+
+    fn dec_latitude(_bin: String) {
+
+    }
+
+    fn dec_longitude(_bin: String) {
+
+    }
+
+    fn dec_inner_radius(_bin: String) {
+
+    }
+
+    fn dec_uncertainty_radius(_bin: String) {
+
+    }
+
+    fn dec_offset_angle(_bin: String) {
+
+    }
+
+    fn dec_included_angle(_bin: String) {
+
+    }
+
+    fn dec_confidence(_bin: String) {
+
     }
 
     // =====================================================================
@@ -148,5 +182,22 @@ impl WGS84 {
         }
 
         return num;
+    }
+
+    // =====================================================================
+
+    pub fn display(&self) {
+        println!("=======================================================================");
+        println!("WGS84: ------------------------ {}", &self.wgs84);
+        println!("=======================================================================");
+        println!("Shape: ------------------------ {}", &self.shape);
+        println!("Latitude: --------------------- {}", &self.latitude);
+        println!("Longitude: -------------------- {}", &self.longitude);
+        println!("Inner radius: ----------------- {}", &self.inner_radius);
+        println!("Uncertainty radius: ----------- {}", &self.uncertainty_radius);
+        println!("Offset angle: ----------------- {}", &self.offset_angle);
+        println!("Included angle: --------------- {}", &self.included_angle);
+        println!("Confidence: ------------------- {}", &self.confidence);
+        println!("=======================================================================");
     }
 }
