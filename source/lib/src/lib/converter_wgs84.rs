@@ -37,7 +37,9 @@ impl WGS84 {
             .join(" ");
     }
 
-    pub fn decode(&mut self) {}
+    pub fn decode(&mut self) {
+        Self::dec_latitude("100100101000001100000010");
+    }
 
     // =====================================================================
 
@@ -125,7 +127,13 @@ impl WGS84 {
     // =====================================================================
 
     fn dec_latitude(_bin: String) {
+        let is_neg: bool = _bin >> 23;
+        let _latitude = _bin & ((1 << 23) -1);
+        let _latitude = format!("{:d}", _latitude);
 
+        let mut latitude = (90 * _latitude) / 2.pow(23);
+
+        println!("{}", latitude);
     }
 
     fn dec_longitude(_bin: String) {
