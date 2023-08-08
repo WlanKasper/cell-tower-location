@@ -6,19 +6,21 @@
 docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
     -i local/swagger.yaml \
     -l rust \
-    -o /local/source/client/
+    -o /local
 
-docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli generate \
+# MacOS
+docker run --platform linux/amd64 --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli generate \
     -i local/swagger.yaml \
-    -l rust-server \
-    -o /local/source/swagger/
+    -l rust \
+    -o /local 
 # --------------------------------------
+
 
 # --------------------------------------
 # Codegen 3.0
 # docker pull swaggerapi/swagger-codegen-cli-v3
 docker run --rm -v {$PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
     -i local/swagger.yaml \
-    -l ruby \
-    -o /local/source/
+    -l go \
+    -o /local/out/go
 # --------------------------------------

@@ -38,7 +38,9 @@ impl WGS84 {
     }
 
     pub fn decode(&mut self) {
-        Self::dec_latitude("100100101000001100000010");
+        let bin_lat = "100100101000001100000010";
+
+        Self::dec_latitude(bin_lat.to_string());
     }
 
     // =====================================================================
@@ -131,7 +133,7 @@ impl WGS84 {
         let _latitude = _bin & ((1 << 23) -1);
         let _latitude = format!("{:d}", _latitude);
 
-        let mut latitude = (90 * _latitude) / 2.pow(23);
+        let mut latitude = (90 * _latitude) / 2_i32.pow(23);
 
         println!("{}", latitude);
     }
