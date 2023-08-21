@@ -38,9 +38,9 @@ impl WGS84 {
     }
 
     pub fn decode(&mut self) {
-        let bin_lat = "110010010100000110000001";
+        let bin_long = "111101101110111010110011";
 
-        Self::dec_latitude(bin_lat);
+        Self::dec_longitude(bin_long);
     }
 
     // =====================================================================
@@ -128,8 +128,8 @@ impl WGS84 {
 
     // =====================================================================
 
-    fn dec_latitude(_bin: &str) {
-        let mut lat_int = i64::from_str_radix(_bin, 2).unwrap();
+    fn dec_latitude(_bin: &str) -> f32 {
+        let mut lat_int: i64 = Self::bin_to_i64(_bin);
 
         let is_neg = lat_int >> 23;
         lat_int = lat_int & ((1 << 23) - 1);
@@ -140,28 +140,52 @@ impl WGS84 {
         return latitude;
     }
 
-    fn dec_longitude(_bin: String) {
+    fn dec_longitude(_bin: &str) -> f32 {
+        let long = if _bin.starts_with('1') {
+            - Self::from_twos_complement(_bin)
+        } else {
+            Self::bin_to_i64(_bin)
+        };
+
+        let long: f32 = (long as f32 * 360.0) / (2_i32.pow(24) as f32);
+
+        return long;
+    }
+
+    fn dec_inner_radius(_bin: &str) {
 
     }
 
-    fn dec_inner_radius(_bin: String) {
+    fn dec_uncertainty_radius(_bin: &str) {
 
     }
 
-    fn dec_uncertainty_radius(_bin: String) {
+    fn dec_offset_angle(_bin: &str) {
 
     }
 
-    fn dec_offset_angle(_bin: String) {
+    fn dec_included_angle(_bin: &str) {
 
     }
 
-    fn dec_included_angle(_bin: String) {
+    fn dec_confidence(_bin: &str) {
 
     }
 
-    fn dec_confidence(_bin: String) {
+    fn bin_to_i64(_bin: &str) -> i64{
+        return i64::from_str_radix(_bin, 2).unwrap();
+    }
 
+    fn from_twos_complement(bin_str: &str) -> i64 {
+        let flipped: String = bin_str.chars().map(|c| match c {
+            '0' => '1',
+            '1' => '0',
+            _ => c,
+        }).collect();
+
+        let result: i64 = i64::from_str_radix(&flipped, 2).unwrap() + 1;
+
+        return result;
     }
 
     // =====================================================================
