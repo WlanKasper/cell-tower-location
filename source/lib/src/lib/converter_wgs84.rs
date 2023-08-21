@@ -38,9 +38,9 @@ impl WGS84 {
     }
 
     pub fn decode(&mut self) {
-        let bin_lat = "100100101000001100000010";
+        let bin_lat = "110010010100000110000001";
 
-        Self::dec_latitude(bin_lat.to_string());
+        Self::dec_latitude(bin_lat);
     }
 
     // =====================================================================
@@ -67,7 +67,7 @@ impl WGS84 {
 
         let enc: u32 = (is_neg as u32) << 23 as u32 | lat;
 
-        return format!("{:0<24b}", enc);
+        return format!("{:0>24b}", enc);
     }
 
     fn enc_longitude(longitude: f32) -> String {
@@ -83,12 +83,12 @@ impl WGS84 {
 
         let enc = isize::from_str_radix(&_enc, 2).unwrap();
 
-        return format!("{:0<24b}", enc);
+        return format!("{:0>24b}", enc);
     }
 
     fn enc_inner_radius(ir: u16) -> String {
         let ir: u16 = ir / 5;
-        let enc: String = format!("{:0<16b}", ir);
+        let enc: String = format!("{:0>16b}", ir);
 
         return enc;
     }
@@ -99,7 +99,7 @@ impl WGS84 {
         let _enc: f32 = ur.log(1.1);
         let _enc: u16 = _enc.round() as u16;
 
-        let mut enc: String = format!("{:0<7b}", _enc);
+        let mut enc: String = format!("{:0>7b}", _enc);
         enc = "0".to_owned() + &enc;
 
         return enc;
@@ -107,20 +107,20 @@ impl WGS84 {
 
     fn enc_offset_angle(oa: u16) -> String {
         let oa: u16 = oa / 2;
-        let enc: String = format!("{:0<8b}", oa);
+        let enc: String = format!("{:0>8b}", oa);
 
         return enc;
     }
 
     fn enc_included_angle(ia: u16) -> String {
         let ia: u16 = ia / 2;
-        let enc: String = format!("{:0<8b}", ia);
+        let enc: String = format!("{:0>8b}", ia);
 
         return enc;
     }
 
     fn enc_confidence(cf: u8) -> String {
-        let mut enc: String = format!("{:0<7b}", cf);
+        let mut enc: String = format!("{:0>7b}", cf);
         enc = "0".to_owned() + &enc;
 
         return enc;
@@ -128,14 +128,16 @@ impl WGS84 {
 
     // =====================================================================
 
-    fn dec_latitude(_bin: String) {
-        let is_neg: bool = _bin >> 23;
-        let _latitude = _bin & ((1 << 23) -1);
-        let _latitude = format!("{:d}", _latitude);
+    fn dec_latitude(_bin: &str) {
+        let mut lat_int = i64::from_str_radix(_bin, 2).unwrap();
 
-        let mut latitude = (90 * _latitude) / 2_i32.pow(23);
+        let is_neg = lat_int >> 23;
+        lat_int = lat_int & ((1 << 23) - 1);
 
-        println!("{}", latitude);
+        let mut latitude: f32 = (90.0 * lat_int as f32) / 2_i32.pow(23) as f32;
+        if is_neg == 1 {latitude *= -1.0}
+
+        return latitude;
     }
 
     fn dec_longitude(_bin: String) {
