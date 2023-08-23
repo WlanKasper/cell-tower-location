@@ -38,9 +38,15 @@ impl WGS84 {
     }
 
     pub fn decode(&mut self) {
-        let bin_long = "111101101110111010110011";
+        let binary_values: Vec<&str> = self.wgs84.split_whitespace().collect();
 
-        Self::dec_longitude(bin_long);
+        self.latitude = Self::dec_latitude(&format!("{}{}{}", binary_values[1], binary_values[2], binary_values[3]));
+        self.longitude = Self::dec_longitude(&format!("{}{}{}", binary_values[4], binary_values[5], binary_values[6]));
+        self.inner_radius = Self::dec_inner_radius(&format!("{}{}", binary_values[7], binary_values[8]));
+        self.uncertainty_radius = Self::dec_uncertainty_radius(binary_values[9]);
+        self.offset_angle = Self::dec_offset_angle(binary_values[10]);
+        self.included_angle = Self::dec_included_angle(binary_values[11]);
+        self.confidence = Self::dec_confidence(binary_values[12]);
     }
 
     // =====================================================================
@@ -147,29 +153,37 @@ impl WGS84 {
             Self::bin_to_i64(_bin)
         };
 
-        let long: f32 = (long as f32 * 360.0) / (2_i32.pow(24) as f32);
+        let long: f32 = (long * 360) as f32 / (2_i32.pow(24) as f32);
 
         return long;
     }
 
-    fn dec_inner_radius(_bin: &str) {
+    fn dec_inner_radius(_bin: &str) -> u16{
+        let inner_radius: i64 = Self::bin_to_i64(_bin);
 
+        return (inner_radius as u16) * 5;
     }
 
-    fn dec_uncertainty_radius(_bin: &str) {
+    fn dec_uncertainty_radius(_bin: &str) -> u16 {
+        let uncertainty_radius: i64 = Self::bin_to_i64(_bin);
 
+        return (1.1_f32.powf(uncertainty_radius as f32).round() as u16 * 10) - 1;
     }
 
-    fn dec_offset_angle(_bin: &str) {
+    fn dec_offset_angle(_bin: &str) -> u16 {
+        let offset_angle: i64 = Self::bin_to_i64(_bin);
 
+        return (offset_angle as u16 + 1) * 2;
     }
 
-    fn dec_included_angle(_bin: &str) {
+    fn dec_included_angle(_bin: &str) -> u16{
+        let included_angle: i64 = Self::bin_to_i64(_bin);
 
+        return (included_angle as u16 + 1) * 2;
     }
 
-    fn dec_confidence(_bin: &str) {
-
+    fn dec_confidence(_bin: &str) -> u8{
+        return Self::bin_to_i64(_bin) as u8;
     }
 
     fn bin_to_i64(_bin: &str) -> i64{
