@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Cell Tower Geolocation
-  description: This is a cell tower geolocation converter on the OpenAPI 3.0 specification.
+  description: This is a cell tower geolocation converter on the OpenAPI 3.1.0 specification.
   version: 0.1.0
 tags:
   - name: Coordinates
@@ -26,6 +26,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WGS84_encoded"
+        '400':
+          description: Bad request
+        '404':
+          description: Server not found
         '405':
           description: Invalid input
   /wgs84/decode:
@@ -48,6 +52,10 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WGS84_decoded"
+        '400':
+          description: Bad request
+        '404':
+          description: Server not found
         '405':
           description: Invalid input
 components:
