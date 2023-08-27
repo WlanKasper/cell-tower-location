@@ -7,5 +7,11 @@ docker pull openapitools/openapi-generator-cli
 docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i local/openapi.yaml \
     -g rust-server \
-    -o /local/out/rust_server
+    -o /local/source/
+# --------------------------------------
+
+
+# --------------------------------------
+# DEV
+
 # --------------------------------------

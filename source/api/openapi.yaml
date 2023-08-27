@@ -1,110 +1,105 @@
 openapi: 3.1.0
 info:
-  title: Cell Tower Geolocation
   description: This is a cell tower geolocation converter on the OpenAPI 3.1.0 specification.
+  title: Cell Tower Geolocation
   version: 0.1.0
+servers:
+- url: /
 tags:
-  - name: Coordinates
+- name: Coordinates
 paths:
   /wgs84/encode:
     post:
-      tags:
-        - Coordinates
-      summary: WGS84 encode endpoint
       description: Encodes using the World Geodetic System 1984
       operationId: encodeWGS84
       requestBody:
-        description: Encode WGS84
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WGS84_decoded"
+              $ref: '#/components/schemas/WGS84_decoded'
+        description: Encode WGS84
       responses:
-        '200':
-          description: Successful operation
+        "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WGS84_encoded"
-        '400':
+                $ref: '#/components/schemas/WGS84_encoded'
+          description: Successful operation
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Server not found
-        '405':
+        "405":
           description: Invalid input
+      summary: WGS84 encode endpoint
+      tags:
+      - Coordinates
   /wgs84/decode:
     post:
-      tags:
-        - Coordinates
-      summary: WGS84 decode endpoint
       description: Decodes using the World Geodetic System 1984
       operationId: decodeWGS84
       requestBody:
-        description: Decode WGS84
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WGS84_encoded"
+              $ref: '#/components/schemas/WGS84_encoded'
+        description: Decode WGS84
       responses:
-        '200':
-          description: Successful operation
+        "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/WGS84_decoded"
-        '400':
+                $ref: '#/components/schemas/WGS84_decoded'
+          description: Successful operation
+        "400":
           description: Bad request
-        '404':
+        "404":
           description: Server not found
-        '405':
+        "405":
           description: Invalid input
+      summary: WGS84 decode endpoint
+      tags:
+      - Coordinates
 components:
   schemas:
     WGS84_encoded:
-      required:
-        - wgs84
-      type: object
+      example:
+        wgs84: ""
       properties:
-        wgs84:
-          type: string
-          examples: ["A0 49 41 81 FF E8 B1 00 09 12 18 18 32"]
-    WGS84_decoded:
+        wgs84: {}
       required:
-        - latitude
-        - longitude
-      type: object
+      - wgs84
+    WGS84_decoded:
+      example:
+        latitude: ""
+        offsetAngle: ""
+        confidence: ""
+        includedAngle: ""
+        innerRadius: ""
+        uncertaintyRadius: ""
+        longitude: ""
       properties:
         latitude:
-          type: number
-          format: double
           description: "from -90 to +90 [degrees]"
-          examples: [12.2324125]
-        longitude:
-          type: number
           format: double
+        longitude:
           description: "from -180 to +180 [degrees]"
-          examples: [47.2324125]
+          format: double
         innerRadius:
-          type: number
-          format: int32
           description: "increment of 5 from 0 to 327 675 [meters]"
-          examples: [60]
+          format: int32
         uncertaintyRadius:
-          type: number
-          format: int32
           description: "from 0 to 1 800 000 [meters]"
-          examples: [20]
+          format: int32
         offsetAngle:
-          type: number
-          format: int32
           description: "increment of 2 from 0 to 359.9...9 [degrees]"
-          examples: [50]
+          format: int32
         includedAngle:
-          type: number
-          format: int32
           description: "increment of 2 from 0.0...1 to 360 [degrees]"
-          examples: [30]
-        confidence:
-          type: number
           format: int32
-          examples: [90]
+        confidence:
+          format: int32
+      required:
+      - latitude
+      - longitude
+
