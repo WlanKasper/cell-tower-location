@@ -115,7 +115,12 @@ async fn decode_wgs84(
         // Your existing implementation logic for 'decode_wgs84' here
         let context = context.clone();
         info!("decode_wgs84({:?}) - X-Span-ID: {:?}", wgs84_encoded, context.get().0.clone());
+
         // Return a successful response
+        let decoded = models::Wgs84Decoded.decode(models::Wgs84Encoded {
+            wgs84: '',
+        });
+
         Ok(DecodeWgs84Response::SuccessfulOperation(models::Wgs84Decoded {
             // Set the fields of the response model using self.wgs84
             // shape: Some(json!("00")),
@@ -138,11 +143,21 @@ async fn decode_wgs84(
         // Your existing implementation logic for 'encode_wgs84' here
         let context = context.clone();
         info!("encode_wgs84({:?}) - X-Span-ID: {:?}", wgs84_decoded, context.get().0.clone());
+
         // Return a successful response
-        Ok(EncodeWgs84Response::SuccessfulOperation(models::Wgs84Encoded {
+        let encoded = models::Wgs84Encoded.encode(models::Wgs84Decoded {
             // Set the fields of the response model using self.wgs84
-            wgs84: Some(json!("TEST AAA")).into(),
-        }))
+            // shape: Some(json!("00")),
+            latitude: json!(45.3),
+            longitude: json!(45.6),
+            inner_radius: Some(json!(45)),
+            uncertainty_radius: Some(json!(45)),
+            offset_angle: Some(json!(45)),
+            included_angle: Some(json!(45)),
+            confidence: Some(json!(45)),
+        });
+
+        Ok(EncodeWgs84Response::SuccessfulOperation(encoded));
     }
 
 }
