@@ -1,0 +1,110 @@
+openapi: 3.1.0
+info:
+  title: Cell Tower Geolocation
+  description: This is a cell tower geolocation converter on the OpenAPI 3.1.0 specification.
+  version: 0.1.0
+tags:
+  - name: Coordinates
+paths:
+  /wgs84/encode:
+    post:
+      tags:
+        - Coordinates
+      summary: WGS84 encode endpoint
+      description: Encodes using the World Geodetic System 1984
+      operationId: encodeWGS84
+      requestBody:
+        description: Encode WGS84
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WGS84_decoded"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WGS84_encoded"
+        '400':
+          description: Bad request
+        '404':
+          description: Server not found
+        '405':
+          description: Invalid input
+  /wgs84/decode:
+    post:
+      tags:
+        - Coordinates
+      summary: WGS84 decode endpoint
+      description: Decodes using the World Geodetic System 1984
+      operationId: decodeWGS84
+      requestBody:
+        description: Decode WGS84
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WGS84_encoded"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WGS84_decoded"
+        '400':
+          description: Bad request
+        '404':
+          description: Server not found
+        '405':
+          description: Invalid input
+components:
+  schemas:
+    WGS84_encoded:
+      required:
+        - wgs84
+      type: object
+      properties:
+        wgs84:
+          type: string
+          examples: ["A0 49 41 81 FF E8 B1 00 09 12 18 18 32"]
+    WGS84_decoded:
+      required:
+        - latitude
+        - longitude
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: double
+          description: "from -90 to +90 [degrees]"
+          examples: [12.2324125]
+        longitude:
+          type: number
+          format: double
+          description: "from -180 to +180 [degrees]"
+          examples: [47.2324125]
+        innerRadius:
+          type: number
+          format: int32
+          description: "increment of 5 from 0 to 327 675 [meters]"
+          examples: [60]
+        uncertaintyRadius:
+          type: number
+          format: int32
+          description: "from 0 to 1 800 000 [meters]"
+          examples: [20]
+        offsetAngle:
+          type: number
+          format: int32
+          description: "increment of 2 from 0 to 359.9...9 [degrees]"
+          examples: [50]
+        includedAngle:
+          type: number
+          format: int32
+          description: "increment of 2 from 0.0...1 to 360 [degrees]"
+          examples: [30]
+        confidence:
+          type: number
+          format: int32
+          examples: [90]

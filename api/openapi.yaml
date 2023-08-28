@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  description: This is a cell tower geolocation converter on the OpenAPI 3.1.0 specification.
+  title: Cell Tower Geolocation
+  version: 0.1.0
+servers:
+- url: /
+tags:
+- name: Coordinates
+paths:
+  /wgs84/encode:
+    post:
+      description: Encodes using the World Geodetic System 1984
+      operationId: encodeWGS84
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WGS84_decoded'
+        description: Encode WGS84
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WGS84_encoded'
+          description: Successful operation
+        "400":
+          description: Bad request
+        "404":
+          description: Server not found
+        "405":
+          description: Invalid input
+      summary: WGS84 encode endpoint
+      tags:
+      - Coordinates
+  /wgs84/decode:
+    post:
+      description: Decodes using the World Geodetic System 1984
+      operationId: decodeWGS84
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WGS84_encoded'
+        description: Decode WGS84
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WGS84_decoded'
+          description: Successful operation
+        "400":
+          description: Bad request
+        "404":
+          description: Server not found
+        "405":
+          description: Invalid input
+      summary: WGS84 decode endpoint
+      tags:
+      - Coordinates
+components:
+  schemas:
+    WGS84_encoded:
+      example:
+        wgs84: ""
+      properties:
+        wgs84: {}
+      required:
+      - wgs84
+    WGS84_decoded:
+      example:
+        latitude: ""
+        offsetAngle: ""
+        confidence: ""
+        includedAngle: ""
+        innerRadius: ""
+        uncertaintyRadius: ""
+        longitude: ""
+      properties:
+        latitude:
+          description: "from -90 to +90 [degrees]"
+          format: double
+        longitude:
+          description: "from -180 to +180 [degrees]"
+          format: double
+        innerRadius:
+          description: "increment of 5 from 0 to 327 675 [meters]"
+          format: int32
+        uncertaintyRadius:
+          description: "from 0 to 1 800 000 [meters]"
+          format: int32
+        offsetAngle:
+          description: "increment of 2 from 0 to 359.9...9 [degrees]"
+          format: int32
+        includedAngle:
+          description: "increment of 2 from 0.0...1 to 360 [degrees]"
+          format: int32
+        confidence:
+          format: int32
+      required:
+      - latitude
+      - longitude
+
